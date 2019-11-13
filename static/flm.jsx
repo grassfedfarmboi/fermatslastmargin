@@ -18,7 +18,7 @@ function removeURLParameter(url, parameter) {
 }
 
 function setFriends(data) {
-  friends_table = document.getElementById('friends');
+  var friends_table = document.getElementById('friends');
   var tbl_row = friends_table.insertRow();
 
   data.forEach(friend => {
@@ -48,7 +48,7 @@ function initCode() {
   console.log("initCode firing");
   console.log("ReadyState: " + document.readyState);
 
-  var reactComponent = ReactDOM.render(React.createElement(FontSlider), document.getElementById('react-root'));
+  var reactComponent = ReactDOM.render(<ParentComponent />, document.getElementById('react-root'));
 
   var params = new URLSearchParams(document.location.search);
   var pagenum = parseInt(params.get('pagenum'), 10) || 1; // this can't be a good idea

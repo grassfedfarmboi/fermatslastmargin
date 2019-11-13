@@ -12,55 +12,60 @@ function TextBox(props) {
 }*/
 
 function PageImage(props) {
-    return (
-        <img id="pageimage" src={props.imgUrl} width="100%" />
-    );
+  return (
+    <img id="pageimage" src={props.imgUrl} width="100%" />
+  );
 }
 
-class TextBox extends React.Component {
-    state = {
-        myNotes: '',
-        friendNotes: '',
-        imgUrl: "/valknut.svg"
-    }
-
-    handleTyping = (event) => {
-        const myNotes = event.target.value;
-        this.setState({ myNotes });
-    }
-
-    setAnnotations = (a) => {
-        console.log(a);
-        if (a[0]['content'] !== null) {
-            const newnotes =
-            this.setState({ myNotes: a[0]['content'] });
-        }
-        if (a[1]['content'] !== null) {
-            this.setState({ friendNotes: a[1]['content'] });
-        }
-    }
-
-    handleImageChange = (newImg) => {
-        const imgUrl = mewImg;
-        this.setState({ imgUrl });
-    }
-
-    render() {
-    const number = Number(this.props.fontsize);
-    return (
-        <div id="container">
-            <textarea id="content" style={{ fontSize: number }} value={this.state.myNotes} onChange={this.handleTyping} />
-            <div id="friend" style={{ fontSize: number }}>{this.state.friendNotes}</div>
-            <PageImage imgUrl={this.state.imgUrl} />
-        </div>
-      );
-    }
+function TextBox(props) {
+  const number = Number(props.fontsize);
+  return (
+    <div id="container">
+        <textarea id="content" style={{ fontSize: number }} value={props.myNotes} onChange={props.onChange} />
+        <div id="friend" style={{ fontSize: number }}>{props.friendNotes}</div>
+        <PageImage imgUrl={props.imgUrl} />
+    </div>
+  );
 }
 
-class FontSlider extends React.Component {
+function FontSlider(props) {
+  const number = Number(props.fontsize);
+  return (
+    <div className="fontsize-slider">
+      <div>Font Size: {number}</div>
+      <input type="range" min="8" max="48" value={number} onChange={props.onChange} />
+      <button onClick={props.onClick}>Reset to default</button>
+    </div>
+  );
+}
+
+class ParentComponent extends React.Component {
   state = {
     defaultSize: 18,
-    fontsize: 18
+    fontsize: 18,
+    myNotes: '',
+    friendNotes: '',
+    imgUrl: "/valknut.svg"
+  }
+
+  handleTyping = (event) => {
+    const myNotes = event.target.value;
+    this.setState({ myNotes });
+  }
+
+  setAnnotations = (a) => {
+    console.log(a);
+    if (a[0]['content'] !== null) {
+        this.setState({ myNotes: a[0]['content'] });
+    }
+    if (a[1]['content'] !== null) {
+        this.setState({ friendNotes: a[1]['content'] });
+    }
+  }
+
+  handleImageChange = (newImg) => {
+    const imgUrl = mewImg;
+    this.setState({ imgUrl });
   }
 
   handleFontSizeChange = event => {
@@ -73,21 +78,13 @@ class FontSlider extends React.Component {
     this.setState({ fontsize });
   }
 
-  testFunction() {
-    console.log("Test Function!")
-  }
-
   render() {
     const fontsize = this.state.fontsize
 
     return (
       <div className="fontslider">
-        <div className="fontsize-slider">
-          <div>Font Size: {fontsize}</div>
-          <input type="range" min="8" max="48" value={fontsize} onChange={this.handleFontSizeChange} />
-          <button onClick={this.handleReset}>Reset to default</button>
-        </div>
-        <TextBox fontsize={fontsize} />
+        <FontSlider onClick{this.handleReset} onChange={this.handleFontSizeChange} />
+        <TextBox fontsize={fontsize} onChange={this.handleTyping} myNotes={this.state.myNotes} friendNotes={this.state.friendNotes} imgUrl={this.state.imgUrl} />
       </div>
     );
   }
