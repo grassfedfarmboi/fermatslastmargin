@@ -1,8 +1,12 @@
 <html>
 
 <head>
+  <meta charset="UTF-8">
+  <meta http-equiv="pragma" content="no-cache" /> <!-- debug -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script type="text/javascript" src="flm.js"></script>
+  <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js" crossorigin></script>
 
   <link rel="stylesheet" type="text/css" href="page.css" media="screen" />
 </head>
@@ -30,13 +34,17 @@
   </table>
   <table id="friends"></table>
   <form name="test" id="test" method="post" action="/index.html">
-    <div id="container">
-      <textarea id="content"></textarea>
-      <div id="friend"></div>
-      <img id="pageimage" src="/valknut.svg" width="100%" />
+    <div id="react-root">
+      <div id="container">
+        <textarea id="content"></textarea>
+        <div id="friend"></div>
+        <img id="pageimage" src="/valknut.svg" width="100%" />
+      </div>
     </div>
   </form>
 
+  <script type="text/babel" src="react.js?v=1"></script>
+  <script type="text/babel" src="flm.jsx?v=1"></script>
 </body>
 
 </html>
