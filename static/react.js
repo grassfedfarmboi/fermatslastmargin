@@ -1,15 +1,4 @@
 'use strict';
-/*
-function TextBox(props) {
-  const number = Number(props.fontsize);
-  return (
-    <div id="container">
-        <textarea id="content" style={{ fontSize: number }}></textarea>
-        <div id="friend" style={{ fontSize: number }}></div>
-        <img id="pageimage" src="/valknut.svg" width="100%" />
-    </div>
-  );
-}*/
 
 function PageImage(props) {
   return (
@@ -29,12 +18,11 @@ function TextBox(props) {
 }
 
 function FontSlider(props) {
-  const number = Number(props.fontsize);
   return (
     <div className="fontsize-slider">
-      <div>Font Size: {number}</div>
-      <input type="range" min="8" max="48" value={number} onChange={props.onChange} />
-      <button onClick={props.onClick}>Reset to default</button>
+      <button onClick={props.onClick}>Reset</button>
+      <div>Font Size: {props.fontsize}</div>
+      <input type="range" min="12" max="56" value={props.fontsize} onChange={props.onChange} />
     </div>
   );
 }
@@ -64,7 +52,7 @@ class ParentComponent extends React.Component {
   }
 
   handleImageChange = (newImg) => {
-    const imgUrl = mewImg;
+    const imgUrl = newImg;
     this.setState({ imgUrl });
   }
 
@@ -73,7 +61,7 @@ class ParentComponent extends React.Component {
     this.setState({ fontsize });
   }
 
-  handleReset = event => {
+  handleReset = event => { //This ruins  URL for some reason, reloads whole page without params
     const fontsize = this.state.defaultSize;
     this.setState({ fontsize });
   }
@@ -82,8 +70,8 @@ class ParentComponent extends React.Component {
     const fontsize = this.state.fontsize
 
     return (
-      <div className="fontslider">
-        <FontSlider onClick{this.handleReset} onChange={this.handleFontSizeChange} />
+      <div className="react-textbox">
+        <FontSlider onClick={this.handleReset} onChange={this.handleFontSizeChange} fontsize={this.state.fontsize} />
         <TextBox fontsize={fontsize} onChange={this.handleTyping} myNotes={this.state.myNotes} friendNotes={this.state.friendNotes} imgUrl={this.state.imgUrl} />
       </div>
     );

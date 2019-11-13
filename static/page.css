@@ -14,21 +14,23 @@
 
 #container > textarea {
   position: fixed;
-  top: 3.2em;
+  top: 3.8rem;
   left: 10px;
   opacity: 0.2;
   width: 70%;
   height: 60%;
   font-size: 18px;
+  z-index: 99;
 }
 
 #container > div#friend {
   position: absolute;
-  top: 3em;
+  top: 0;
   left: 50%;
-  opacity: 0.2;
+  opacity: 0.5;
   width: 50%;
   height: 60%;
+  text-align: right;
 }
 
 #container > textarea:focus {
@@ -94,18 +96,24 @@ a.backtolist:active {
   margin-right: 1em;
 }
 
-.fontslider-slider {
-  position: fixed; bottom: 2%; right: 2%;
+.fontsize-slider {
+  position: fixed; bottom: 2%; right: 1%;
+  width: 20rem;
+  padding: 0.6rem;
+  z-index: 100;
+  background-color: #ccc;
+  border: solid 2px black;
+  text-align: left;
 }
-.fontslider input {
+.react-textbox input {
   width: 100%;
-  margin: 10px 0;
+  margin: 10px 0 0;
 }
-.fontslider button {
+.react-textbox button {
   background: #c94d46;
   border: 1px solid #832420;
   border-radius: 4px;
   color: #fff;
   font-size: 16px;
-  margin-bottom: 1em;
+  float: right;
 }

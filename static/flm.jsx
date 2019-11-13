@@ -17,24 +17,6 @@ function removeURLParameter(url, parameter) {
   return url;
 }
 
-function setFriends(data) {
-  var friends_table = document.getElementById('friends');
-  var tbl_row = friends_table.insertRow();
-
-  data.forEach(friend => {
-      var row_cel = tbl_row.insertCell(0);
-      var ank = document.createElement('a');
-      ank.title = friend;
-      if (friendview != friend) {
-        ank.href = location.href + '&friendview=' + friend;
-      } else {
-        ank.href = removeURLParameter(location.href, 'friendview');
-      }
-      ank.appendChild(document.createTextNode(friend));
-      row_cel.appendChild(ank);
-  });
-}
-
 function hereagain() {
   return (
     window.location.protocol +
@@ -44,10 +26,7 @@ function hereagain() {
   );
 }
 
-function initCode() {
-  console.log("initCode firing");
-  console.log("ReadyState: " + document.readyState);
-
+function initCode() { //These functions all share vars
   var reactComponent = ReactDOM.render(<ParentComponent />, document.getElementById('react-root'));
 
   var params = new URLSearchParams(document.location.search);
@@ -58,7 +37,7 @@ function initCode() {
   var uid = params.get('uid') || 'todo';
   var friendview = params.get('friendview') || '';
   var didJustEscape = false;
-  reactComponent.testFunction();
+
   var content = document.getElementById('content'); // I use this everywhere.
 
   $('#status').val(hereagain());
@@ -81,9 +60,25 @@ function initCode() {
   }
   function setPageImage(pagenum) {
     let imgsrc = '/' + uid + '/page-' + pagenum + '.png';
-    reactComponent.handleImgChange(imgsrc);
-    //document.getElementById('pageimage').setAttribute('src', imgsrc);
+    reactComponent.handleImageChange(imgsrc);
     return imgsrc;
+  }
+  function setFriends(data) {
+    var friends_table = document.getElementById('friends');
+    var tbl_row = friends_table.insertRow();
+
+    data.forEach(friend => {
+        var row_cel = tbl_row.insertCell(0);
+        var ank = document.createElement('a');
+        ank.title = friend;
+        if (friendview != friend) {
+          ank.href = location.href + '&friendview=' + friend;
+        } else {
+          ank.href = removeURLParameter(location.href, 'friendview');
+        }
+        ank.appendChild(document.createTextNode(friend));
+        row_cel.appendChild(ank);
+    });
   }
 
   $.get(
@@ -144,56 +139,48 @@ function initCode() {
     }
   });
 
-  content.addEventListener('blur', e => {
-    colsole.log("blur");
-    // check if escaped key triggered the blur, only submit if it did not.
-    if (!didJustEscape) {
-      didJustEscape = false;
-      // submit, check for write, if success then redirect to this page
-      if (content.value.length > 0) {
-        // check for empty textarea, this might work?
-        // submit to server
-        $.post(
-          '/annotate',
-          JSON.stringify({
-            pageNumber: pagenum,
-            content: content.value,
-            paperuid: uid
-          })
-        );
-      } else {
-        alert('not saving empty annotation');
+  //Don't add blur listener until page is complete
+  if( document.readyState == 'complete' ) {
+    addBlurListener();
+  } else {
+    window.addEventListener('complete', e => {
+      addBlurListener();
+    });
+  }
+
+  function addBlurListener() {
+    content.addEventListener('blur', e => {
+      console.log("blur");
+      // check if escaped key triggered the blur, only submit if it did not.
+      if (!didJustEscape) {
+        didJustEscape = false;
+        // submit, check for write, if success then redirect to this page
+        if (content.value.length > 0) {
+          // check for empty textarea, this might work?
+          // submit to server
+          $.post(
+            '/annotate',
+            JSON.stringify({
+              pageNumber: pagenum,
+              content: content.value,
+              paperuid: uid
+            })
+          );
+        } else {
+          alert('not saving empty annotation');
+        }
       }
-    }
-  });
+    });
+  }
 }
 
 if( document.readyState !== 'loading' ) {
-  console.log("not loading; no nead to listen")
+  //Not loading, no need to listen
   initCode();
 } else {
   document.addEventListener('DOMContentLoaded', e => {
-    console.log('DOMContentLoaded event');
-    console.log("ReadyState: " + document.readyState);
     initCode();
-
-    $(document).ready(function() {
-      console.log('document ready jquery');
-      console.log("ReadyState: " + document.readyState);
-      console.log("init here?")
-    });
-
   });
-}
 
-
-if( document.readyState == 'complete' ) {
-  consol.log("already complete");
-} else {
-  window.addEventListener('complete', e => {
-    console.log('complete event');
-    console.log("ReadyState: " + document.readyState);
-
-  });
 }
 
